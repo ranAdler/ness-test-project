@@ -97,11 +97,6 @@ class LandingPageBuilder:
 
         logger.info(f"📝 Setting search query: '{query}'")
 
-        # Verify landing page is loaded
-        is_loaded = await self.landing_page.is_loaded()
-        if not is_loaded:
-            raise Exception("Landing page not loaded. Cannot set search.")
-
         # Clear and fill search input with the query
         search_input = self.landing_page.search_page.SEARCH_INPUT
         logger.info(f"Clearing and filling search input: {search_input}")

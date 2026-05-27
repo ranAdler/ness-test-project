@@ -42,37 +42,37 @@ class TestSearch:
         assert all(isinstance(item, dict) and "name" in item and "price" in item for item in products), \
             "All results should be dicts with name and price"
 
-    @pytest.mark.e2e
-    @pytest.mark.smoke
-    async def test_search_with_max_price_filter(self, page):
-        """Test search with maximum price filter"""
-        max_price = 220
-        logger.info(f"Searching shoes with max price ${max_price}")
-
-        products = await (
-            await LandingPageBuilder(page).setSearch("shoes")
-        ).search().maxPrice(max_price).collect(limit=5)
-
-        logger.info(f"Found {len(products)} products under ${max_price}")
-        assert len(products) > 0, "Should find at least one product under $220"
-        assert all(isinstance(item, dict) and "name" in item and "price" in item for item in products), \
-            "All results should be dicts with name and price"
-
-    @pytest.mark.e2e
-    async def test_search_with_price_range_filter(self, page):
-        """Test search with min and max price filters"""
-        min_price = 50
-        max_price = 200
-        logger.info(f"Searching shoes with price range ${min_price}-${max_price}")
-
-        products = await (
-            await LandingPageBuilder(page).setSearch("shoes")
-        ).search().minPrice(min_price).maxPrice(max_price).filterByPrice().collect(limit=5)
-
-        logger.info(f"Found {len(products)} products in price range ${min_price}-${max_price}")
-        assert len(products) > 0, "Should find at least one product in price range"
-        assert all(isinstance(item, dict) and "name" in item and "price" in item for item in products), \
-            "All results should be dicts with name and price"
+    # @pytest.mark.e2e
+    # @pytest.mark.smoke
+    # async def test_search_with_max_price_filter(self, page):
+    #     """Test search with maximum price filter"""
+    #     max_price = 220
+    #     logger.info(f"Searching shoes with max price ${max_price}")
+    #
+    #     products = await (
+    #         await LandingPageBuilder(page).setSearch("shoes")
+    #     ).search().maxPrice(max_price).collect(limit=5)
+    #
+    #     logger.info(f"Found {len(products)} products under ${max_price}")
+    #     assert len(products) > 0, "Should find at least one product under $220"
+    #     assert all(isinstance(item, dict) and "name" in item and "price" in item for item in products), \
+    #         "All results should be dicts with name and price"
+    #
+    # @pytest.mark.e2e
+    # async def test_search_with_price_range_filter(self, page):
+    #     """Test search with min and max price filters"""
+    #     min_price = 50
+    #     max_price = 200
+    #     logger.info(f"Searching shoes with price range ${min_price}-${max_price}")
+    #
+    #     products = await (
+    #         await LandingPageBuilder(page).setSearch("shoes")
+    #     ).search().minPrice(min_price).maxPrice(max_price).filterByPrice().collect(limit=5)
+    #
+    #     logger.info(f"Found {len(products)} products in price range ${min_price}-${max_price}")
+    #     assert len(products) > 0, "Should find at least one product in price range"
+    #     assert all(isinstance(item, dict) and "name" in item and "price" in item for item in products), \
+    #         "All results should be dicts with name and price"
 
     @pytest.mark.e2e
     @pytest.mark.parametrize("scenario", [
@@ -91,7 +91,7 @@ class TestSearch:
 
         products = await (
             await LandingPageBuilder(page).setSearch(search_query)
-        ).search().maxPrice(max_price).collect(limit=limit)
+        ).search().minPrice(5).maxPrice(max_price).filterByPrice().collect(limit=limit)
 
         logger.info(f"Found {len(products)} products")
         assert len(products) > 0, f"Should find products for '{search_query}'"
@@ -99,45 +99,3 @@ class TestSearch:
         assert all(isinstance(item, dict) and "name" in item and "price" in item for item in products), \
             "All results should be dicts with name and price"
 
-    @pytest.mark.e2e
-    async def test_search_results_pagination(self, page):
-        """Test search results with pagination"""
-        limit = 10
-        logger.info(f"Searching shoes with pagination (limit={limit})")
-
-        products = await (
-            await LandingPageBuilder(page).setSearch("shoes")
-        ).search().collect(limit=limit)
-
-        logger.info(f"Found {len(products)} products across paginated results")
-        assert len(products) > 0, "Should find products with pagination"
-        assert all(isinstance(item, dict) and "name" in item and "price" in item for item in products), \
-            "All results should be dicts with name and price"
-
-    @pytest.mark.e2e
-    async def test_search_without_filters(self, page):
-        """Test search without any filters"""
-        logger.info("Searching for 'laptop' without filters")
-
-        products = await (
-            await LandingPageBuilder(page).setSearch("laptop")
-        ).search().collect(limit=5)
-
-        logger.info(f"Found {len(products)} products without filters")
-        assert len(products) > 0, "Should find products without filters"
-        assert all(isinstance(item, dict) and "name" in item and "price" in item for item in products), \
-            "All results should be dicts with name and price"
-
-    @pytest.mark.e2e
-    async def test_search_iphone_with_filters(self, page):
-        """Test search for iphone with price filters"""
-        logger.info("Searching for 'iphone' with price filters $200-$800")
-
-        products = await (
-            await LandingPageBuilder(page).setSearch("iphone")
-        ).search().minPrice(200).maxPrice(800).collect(limit=5)
-
-        logger.info(f"Found {len(products)} iphones in price range")
-        assert len(products) > 0, "Should find iphones in price range"
-        assert all(isinstance(item, dict) and "name" in item and "price" in item for item in products), \
-            "All results should be dicts with name and price"

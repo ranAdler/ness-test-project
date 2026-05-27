@@ -9,6 +9,7 @@ from .landing_page import LandingPage
 from .item_page import ItemPage
 from .landing_page_builder import LandingPageBuilder
 from .item_page_builder import ItemPageBuilder
+from .selected_item_page import SelectedItemPage
 
 __all__ = [
     "BasePage",
@@ -22,5 +23,6 @@ __all__ = [
     "LandingPage",
     "ItemPage",
     "LandingPageBuilder",
-    "ItemPageBuilder"
+    "ItemPageBuilder",
+    "SelectedItemPage"
 ]
