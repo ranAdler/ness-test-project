@@ -6,7 +6,7 @@ Implement an end-to-end test automation scenario on an eBay demo commerce site w
 - Add items to shopping cart
 - Verify shopping cart total doesn't exceed budget
 
-**Tech Stack**: Playwright + Python | Reports: Allure/Extent Reports | Architecture: Page Object Model (POM)
+**Tech Stack**: do pha     | Reports: Allure/Extent Reports | Architecture: Page Object Model (POM)
 **Timeline**: 3-4 hours implementation + 20-30 min reading/demo
 
 ---
@@ -30,7 +30,7 @@ Implement an end-to-end test automation scenario on an eBay demo commerce site w
 
 ---
 
-## Phase 2: Core Automation Framework
+            ## d    
 
 ### Task 2.1: Page Object Model Implementation
 - [ ] Create base Page class with common methods
@@ -159,16 +159,16 @@ Implement an end-to-end test automation scenario on an eBay demo commerce site w
   - [ ] Browser/environment requirements
   - [ ] Test site availability/stability notes
 
-### Task 6.2: Test Reporting Setup
-- [ ] Configure Allure Reports (or Extent Reports)
-- [ ] Set up report generation
-- [ ] Add screenshots to reports
-- [ ] Add test execution logs
-- [ ] Generate HTML report with:
-  - [ ] Test results summary
-  - [ ] Pass/fail statistics
-  - [ ] Screenshots for each step
-  - [ ] Execution timeline
+### Task 6.2: Test Reporting Setup ✅
+- [x] Configure Allure Reports (or Extent Reports)
+- [x] Set up report generation
+- [x] Add screenshots to reports
+- [x] Add test execution logs
+- [x] Generate HTML report with:
+  - [x] Test results summary
+  - [x] Pass/fail statistics
+  - [x] Screenshots for each step
+  - [x] Execution timeline
 
 ### Task 6.3: Create Bug Report Document
 - [ ] File: `ReadMeAIBugs.md`

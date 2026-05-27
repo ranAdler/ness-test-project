@@ -1,0 +1,53 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.iml
+*.swp
+*.swo
+*~
+~$*
+
+# Test coverage
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Reports
+allure-results/
+allure-report/
+logs/
+screenshots/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+.env.dev
+.env.production
+.env.staging
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Documents
+*.docx
+
+# Build
+build/
+dist/
+*.egg-info/
+
+# Playwright
+.auth.json

@@ -1,0 +1,3 @@
+scenario_id,name,search_query,max_price,budget_per_item,expected_items_count,tags
+SC001,Search shoes under $220,shoes,220,220,5,smoke|e2e
+SC002,Search running shoes under $200,running shoes,200,200,5,e2e
