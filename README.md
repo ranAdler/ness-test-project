@@ -408,24 +408,253 @@ The report includes:
 
 ## Environment Configuration
 
-### Environment Files
+### Environment Files Overview
+
+This project supports multiple environment configurations using `.env` files. Each environment has specific settings optimized for its use case.
+
+#### Available Environments
+
+| File | Purpose | Browser | Logging | Screenshots |
+|------|---------|---------|---------|-------------|
+| `.env.example` | Template for all environments | Headless | INFO | On failure |
+| `.env.dev` | Local development & debugging | **Visible** | **DEBUG** | On failure |
+| `.env.staging` | Staging server testing | Headless | INFO | On failure |
+| `.env.production` | Production testing | Headless | **WARNING** | **Disabled** |
+
+#### Setup Instructions
+
+1. **Initial Setup:**
+   ```bash
+   cp .env.example .env
+   # Edit .env with your preferred environment settings
+   ```
+
+2. **For Development:**
+   ```bash
+   cp .env.dev .env
+   # Now run tests with visible browser for debugging
+   ```
+
+3. **For CI/CD Pipeline:**
+   ```bash
+   # Use .env.staging for pre-release testing
+   # Use .env.production for production validation
+   ```
+
+---
+
+### Detailed Environment Configurations
+
+#### 🚀 Development (`.env.dev`)
+
+**Best for:** Local testing and debugging
 
 ```env
-# Browser settings
 BROWSER=chromium
-HEADLESS=true
+HEADLESS=false          # ← Browser window visible for debugging
+SLOW_MO=500             # ← Slow down actions by 500ms to see what's happening
+
+BASE_URL=https://ebay.com
+DEMO_URL=https://ebay.com
+
+DEFAULT_TIMEOUT=30000
+IMPLICIT_WAIT=10000
+EXPLICIT_WAIT=20000
+
+LOG_LEVEL=DEBUG         # ← Verbose logging for debugging
+SCREENSHOT_ON_FAILURE=true
+
+REPORT_TYPE=allure
+REPORT_DIR=allure-results
+
+# Login Test Credentials (for local testing only)
+EBAY_USERNAME=valid_user@example.com
+EBAY_PASSWORD=ValidPassword123
+INVALID_USERNAME=invalid_user_does_not_exist@example.com
+INVALID_PASSWORD=WrongPassword123
+```
+
+**Key Features:**
+- ✅ Visible browser for step-by-step debugging
+- ✅ Debug logging shows detailed execution info
+- ✅ Slow motion helps you see what's happening
+- ✅ Includes test credentials for login testing
+
+**Usage:**
+```bash
+pytest tests/ --env=dev
+# OR use slow motion for specific tests
+HEADLESS=false SLOW_MO=1000 pytest tests/test_search.py -v
+```
+
+---
+
+#### 🧪 Staging (`.env.staging`)
+
+**Best for:** Pre-release validation on staging servers
+
+```env
+BROWSER=chromium
+HEADLESS=true           # ← Run in headless mode (no browser window)
 SLOW_MO=0
 
-# URLs
-BASE_URL=https://www.ebay.com
+BASE_URL=https://staging-ebay.example.com
+DEMO_URL=https://staging-ebay.example.com
 
-# Timeouts (milliseconds)
 DEFAULT_TIMEOUT=30000
+IMPLICIT_WAIT=10000
+EXPLICIT_WAIT=20000
 
-# Logging
-LOG_LEVEL=INFO
+LOG_LEVEL=INFO          # ← Standard logging
 SCREENSHOT_ON_FAILURE=true
+
+REPORT_TYPE=allure
+REPORT_DIR=allure-results-staging
 ```
+
+**Key Features:**
+- ✅ Headless mode for CI/CD pipelines
+- ✅ Points to staging server (not production)
+- ✅ Balanced logging (INFO level)
+- ✅ Separate report directory for staging results
+
+**Usage:**
+```bash
+pytest tests/ --env=staging
+# With report generation
+pytest tests/ --env=staging --alluredir=allure-results-staging
+```
+
+---
+
+#### 🔒 Production (`.env.production`)
+
+**Best for:** Production validation and monitoring
+
+```env
+BROWSER=chromium
+HEADLESS=true           # ← Headless mode
+SLOW_MO=0
+
+BASE_URL=https://www.ebay.com
+DEMO_URL=https://www.ebay.com
+
+DEFAULT_TIMEOUT=30000
+IMPLICIT_WAIT=10000
+EXPLICIT_WAIT=20000
+
+LOG_LEVEL=WARNING       # ← Only warnings and errors
+SCREENSHOT_ON_FAILURE=false  # ← Don't capture screenshots
+
+REPORT_TYPE=allure
+REPORT_DIR=allure-results-prod
+```
+
+**Key Features:**
+- ✅ Minimal logging (WARNING level only)
+- ✅ Screenshots disabled to avoid data exposure
+- ✅ Tests actual production environment
+- ✅ Separate report directory for production results
+
+**Usage:**
+```bash
+pytest tests/ --env=production
+# Important: Use only for critical health checks
+```
+
+**⚠️ Warning:** Use production environment sparingly to avoid:
+- Generating test data in production
+- Impacting real users
+- Unnecessary API calls
+
+---
+
+### Configuration Variables Reference
+
+#### Browser Settings
+```env
+BROWSER=chromium        # chromium | firefox | webkit
+HEADLESS=true           # true (headless) | false (visible window)
+SLOW_MO=0               # Milliseconds to slow down actions (0 = normal speed)
+```
+
+#### URLs
+```env
+BASE_URL=https://www.ebay.com      # Main application URL
+DEMO_URL=https://example-ebay.com  # Demo/staging URL
+```
+
+#### Timeouts (milliseconds)
+```env
+DEFAULT_TIMEOUT=30000   # General element timeout
+IMPLICIT_WAIT=10000     # Implicit wait between actions
+EXPLICIT_WAIT=20000     # Explicit wait for specific conditions
+```
+
+#### Logging & Reporting
+```env
+LOG_LEVEL=INFO          # DEBUG | INFO | WARNING | ERROR
+SCREENSHOT_ON_FAILURE=true   # Capture screenshots on failures
+REPORT_TYPE=allure      # Report format
+REPORT_DIR=allure-results    # Report output directory
+```
+
+#### Test Credentials (Development Only)
+```env
+EBAY_USERNAME=valid_user@example.com
+EBAY_PASSWORD=ValidPassword123
+INVALID_USERNAME=invalid_user_does_not_exist@example.com
+INVALID_PASSWORD=WrongPassword123
+```
+
+---
+
+### Switching Between Environments
+
+**Option 1: Copy environment file**
+```bash
+# Use development settings
+cp .env.dev .env
+pytest tests/
+
+# Switch to staging
+cp .env.staging .env
+pytest tests/
+```
+
+**Option 2: Environment variable override**
+```bash
+# Override specific settings
+HEADLESS=false LOG_LEVEL=DEBUG pytest tests/
+
+# Override base URL
+BASE_URL=https://staging.example.com pytest tests/
+```
+
+**Option 3: Command-line argument (if configured)**
+```bash
+pytest tests/ --env=dev
+pytest tests/ --env=staging
+pytest tests/ --env=production
+```
+
+---
+
+### Best Practices
+
+✅ **DO:**
+- Use `.env.dev` locally for debugging
+- Use `.env.staging` before releases
+- Keep `.env.production` for critical tests only
+- Commit `.env.example` (no secrets)
+- Use `.gitignore` to exclude `.env` files with actual credentials
+
+❌ **DON'T:**
+- Commit actual `.env` files with real credentials
+- Run unnecessary tests against production
+- Enable screenshots in production (data exposure risk)
+- Use DEBUG logging in production (performance impact)
+- Store sensitive data in version control
 
 ---
 
